@@ -160,8 +160,6 @@ function ProfileApp({
       />
 
       <Nav
-        playerName={identity.name}
-        profileSlot={`${t("profile")} ${identity.name}`}
         locale={locale}
         onLocaleChange={setLocale}
         onImport={() => inputRef.current?.click()}

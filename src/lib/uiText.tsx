@@ -4,7 +4,6 @@ import { createContext, useContext, type ReactNode } from "react"
 import type { Locale } from "@/lib/balatroLocale"
 
 export type UIText = {
-  localAnalysis: string
   profile: string
   language: string
   importProfile: string
@@ -106,7 +105,6 @@ export type UIText = {
 }
 
 const en: UIText = {
-  localAnalysis: "Local save analysis",
   profile: "Profile",
   language: "Language",
   importProfile: "Import Profile",
@@ -200,7 +198,7 @@ const en: UIText = {
   importTitlePre: "Drop your",
   importNote: "Your save is parsed locally. Nothing is uploaded.",
   dropCta: "Drag & drop, or click to choose",
-  dropHint: "profile.json (also accepts profile.jkr)",
+  dropHint: "profile.jkr or profile.json",
 
   errInvalidJson:
     "That file is not valid JSON. Export your save as profile.json or upload profile.jkr.",
@@ -211,7 +209,6 @@ const en: UIText = {
 }
 
 const zhCN: UIText = {
-  localAnalysis: "本地存档分析",
   profile: "存档",
   language: "语言",
   importProfile: "导入存档",
@@ -305,7 +302,7 @@ const zhCN: UIText = {
   importTitlePre: "拖入你的",
   importNote: "存档将在本地解析，不会上传任何内容。",
   dropCta: "拖放，或点击选择文件",
-  dropHint: "profile.json（也支持 profile.jkr）",
+  dropHint: "profile.jkr、profile.json",
 
   errInvalidJson:
     "这个文件不是有效的 JSON。请导出 profile.json 或上传 profile.jkr。",
@@ -317,7 +314,6 @@ const zhCN: UIText = {
 
 const zhTW: UIText = {
   ...zhCN,
-  localAnalysis: "本機存檔分析",
   profile: "存檔",
   language: "語言",
   importProfile: "匯入存檔",
@@ -411,7 +407,7 @@ const zhTW: UIText = {
   importTitlePre: "拖入你的",
   importNote: "存檔將在本機解析，不會上傳任何內容。",
   dropCta: "拖放，或點擊選擇檔案",
-  dropHint: "profile.json（也支援 profile.jkr）",
+  dropHint: "profile.jkr or profile.json",
 
   errInvalidJson:
     "這個檔案不是有效的 JSON。請匯出 profile.json 或上傳 profile.jkr。",
@@ -422,7 +418,6 @@ const zhTW: UIText = {
 }
 
 const ja: UIText = {
-  localAnalysis: "ローカルセーブ分析",
   profile: "プロフィール",
   language: "言語",
   importProfile: "セーブを読み込む",
@@ -516,7 +511,7 @@ const ja: UIText = {
   importTitlePre: "ここにドロップ",
   importNote: "セーブはローカルで解析され、アップロードされません。",
   dropCta: "ドラッグ＆ドロップ、またはクリックして選択",
-  dropHint: "profile.json（profile.jkr）",
+  dropHint: "profile.jkr or profile.json",
 
   errInvalidJson:
     "このファイルは有効な JSON ではありません。profile.json を書き出すか profile.jkr をアップロードしてください。",
@@ -527,7 +522,6 @@ const ja: UIText = {
 }
 
 const ko: UIText = {
-  localAnalysis: "로컬 세이브 분석",
   profile: "프로필",
   language: "언어",
   importProfile: "세이브 불러오기",
@@ -621,7 +615,7 @@ const ko: UIText = {
   importTitlePre: "여기에 드롭",
   importNote: "세이브는 로컬에서 분석되며 업로드되지 않습니다.",
   dropCta: "드래그 앤 드롭 또는 클릭하여 선택",
-  dropHint: "profile.json (profile.jkr)",
+  dropHint: "profile.jkr or profile.json",
 
   errInvalidJson:
     "유효한 JSON 파일이 아닙니다. profile.json 을 내보내거나 profile.jkr 을 업로드하세요.",

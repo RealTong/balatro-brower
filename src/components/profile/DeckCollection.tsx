@@ -1,9 +1,8 @@
-import { useEffect, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 
 import { formatInt, formatPercent } from "@/lib/format"
 import { STAKE_COLORS, STAKES, type StakeName } from "@/lib/gameData"
 import {
-  getFleetAverages,
   sortDecks,
   type DeckSortKey,
   type DeckStat,
@@ -100,143 +99,12 @@ function DeckCard({
   )
 }
 
-function DeckDrawer({
-  deck,
-  decks,
-  onClose,
-  t,
-}: {
-  deck: DeckStat
-  decks: DeckStat[]
-  onClose: () => void
-  t: TFn
-}) {
-  const fleet = useMemo(() => getFleetAverages(decks), [decks])
-
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose()
-    }
-    window.addEventListener("keydown", onKey)
-    return () => window.removeEventListener("keydown", onKey)
-  }, [onClose])
-
-  const rateDelta = deck.winRate - fleet.winRate
-  const attemptsDelta = deck.attempts - fleet.attempts
-
-  return (
-    <>
-      <div className="drawer-overlay" onClick={onClose} />
-      <aside
-        className="drawer"
-        role="dialog"
-        aria-modal="true"
-        aria-label={`${deck.name} details`}
-      >
-        <div className="drawer-head">
-          <div>
-            <div className="kicker">{deck.key}</div>
-            <h3 className="drawer-title" style={{ color: deck.accentHex }}>
-              {deck.name}
-            </h3>
-          </div>
-          <button className="drawer-close" type="button" onClick={onClose}>
-            ✕
-          </button>
-        </div>
-
-        <div className="drawer-body">
-          <div className="kv-grid">
-            <div className="kv">
-              <div className="kv-label">{t("attempts")}</div>
-              <div className="kv-value">{formatInt(deck.attempts)}</div>
-            </div>
-            <div className="kv">
-              <div className="kv-label">{t("winRate")}</div>
-              <div className="kv-value" style={{ color: deck.accentHex }}>
-                {formatPercent(deck.winRate)}
-              </div>
-            </div>
-            <div className="kv">
-              <div className="kv-label">{t("wins")}</div>
-              <div className="kv-value" style={{ color: "var(--green)" }}>
-                {formatInt(deck.wins)}
-              </div>
-            </div>
-            <div className="kv">
-              <div className="kv-label">{t("losses")}</div>
-              <div className="kv-value" style={{ color: "var(--red)" }}>
-                {formatInt(deck.losses)}
-              </div>
-            </div>
-          </div>
-
-          <div>
-            <div className="kicker" style={{ marginBottom: "0.6rem" }}>
-              {t("stakeBreakdown")}
-            </div>
-            <div className="stake-table">
-              {deck.stakes.map((cell) => (
-                <div className="stake-row" key={cell.stake}>
-                  <span
-                    className="swatch"
-                    style={{ background: STAKE_COLORS[cell.stake as StakeName] }}
-                  />
-                  <span>{cell.stake}</span>
-                  <span className="stake-wl">
-                    <b>{cell.wins}W</b> · <i>{cell.losses}L</i>
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <div className="kicker" style={{ marginBottom: "0.6rem" }}>
-              {t("vsFleet")}
-            </div>
-            <div className="stake-table">
-              <div className="stake-row" style={{ gridTemplateColumns: "1fr auto" }}>
-                <span>{t("cmpStake")}</span>
-                <span className="stake-wl">
-                  {stakeLabel(deck.highestClearedStake, t)}
-                </span>
-              </div>
-              <div className="stake-row" style={{ gridTemplateColumns: "1fr auto" }}>
-                <span>{t("cmpWinRateVs")}</span>
-                <span className="stake-wl">
-                  <b className={rateDelta >= 0 ? "up" : "down"}>
-                    {rateDelta >= 0 ? "+" : ""}
-                    {formatPercent(rateDelta)}
-                  </b>{" "}
-                  · {t("cmpAvg", { v: formatPercent(fleet.winRate) })}
-                </span>
-              </div>
-              <div className="stake-row" style={{ gridTemplateColumns: "1fr auto" }}>
-                <span>{t("cmpAttemptsVs")}</span>
-                <span className="stake-wl">
-                  <b className={attemptsDelta >= 0 ? "up" : "down"}>
-                    {attemptsDelta >= 0 ? "+" : ""}
-                    {formatInt(attemptsDelta)}
-                  </b>{" "}
-                  · {t("cmpAvg", { v: formatInt(Math.round(fleet.attempts)) })}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </aside>
-    </>
-  )
-}
-
 export function DeckCollection({ decks }: { decks: DeckStat[] }) {
   const t = useT()
   const [sort, setSort] = useState<DeckSortKey>("order")
-  const [openKey, setOpenKey] = useState<string | null>(null)
+  const [, setOpenKey] = useState<string | null>(null)
 
   const sorted = useMemo(() => sortDecks(decks, sort), [decks, sort])
-  const openDeck = decks.find((d) => d.key === openKey) ?? null
 
   return (
     <section className="panel panel-pad span-12 enter" aria-label="Deck collection">
@@ -273,15 +141,6 @@ export function DeckCollection({ decks }: { decks: DeckStat[] }) {
           />
         ))}
       </div>
-
-      {openDeck ? (
-        <DeckDrawer
-          deck={openDeck}
-          decks={decks}
-          t={t}
-          onClose={() => setOpenKey(null)}
-        />
-      ) : null}
     </section>
   )
 }

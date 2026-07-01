@@ -4,8 +4,6 @@ import { localeLabels, locales, type Locale } from "@/lib/balatroLocale"
 import { useT } from "@/lib/uiText"
 
 type NavProps = {
-  playerName: string
-  profileSlot: string
   locale: Locale
   onLocaleChange: (locale: Locale) => void
   onImport: () => void
@@ -14,8 +12,6 @@ type NavProps = {
 }
 
 export function Nav({
-  playerName,
-  profileSlot,
   locale,
   onLocaleChange,
   onImport,
@@ -36,11 +32,7 @@ export function Nav({
     <nav className={`nav${stuck ? " is-stuck" : ""}`}>
       <div className="nav-inner">
         <div className="nav-brand">
-          <span className="nav-eyebrow">Balatro Profile</span>
-          <span className="nav-name">{playerName}</span>
-          <span className="nav-sub">
-            {profileSlot} · {t("localAnalysis")}
-          </span>
+          <span className="nav-eyebrow">Balatro Browser</span>
         </div>
         <div className="nav-actions">
           <select

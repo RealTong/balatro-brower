@@ -9,11 +9,11 @@ type ImportScreenProps = {
 }
 
 const DECOR = [
-  "Blue Joker",
-  "Foil",
-  "The Chariot",
-  "Crystal Ball",
-  "Boss Tag",
+  "Joker",
+  "Mime",
+  "Gros Michel",
+  "Baron",
+  "Blueprint",
 ]
 
 export function ImportScreen({ error, onFile }: ImportScreenProps) {
@@ -45,7 +45,7 @@ export function ImportScreen({ error, onFile }: ImportScreenProps) {
             ))}
           </div>
 
-          <span className="import-logo">Balatro Profile</span>
+          <span className="import-logo">Balatro Browser</span>
           <h1 className="import-title">
             {t("importTitlePre")} profile.json
           </h1>
@@ -53,7 +53,7 @@ export function ImportScreen({ error, onFile }: ImportScreenProps) {
 
           <button
             type="button"
-            className={`import-drop${dragging ? " is-dragging" : ""}`}
+            className={`import-drop${dragging ? " is-dragging" : ""} w-full`}
             onClick={() => inputRef.current?.click()}
             onDragOver={(event) => {
               event.preventDefault()
