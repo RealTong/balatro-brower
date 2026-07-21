@@ -1,5 +1,6 @@
 import { useRef, useState } from "react"
-import { motion } from "framer-motion"
+import { AnimatePresence, motion } from "framer-motion"
+import { Check, Upload } from "lucide-react"
 
 import { wikiImageUrl } from "@/lib/gameData"
 import { useT } from "@/lib/uiText"
@@ -29,6 +30,19 @@ const fanSpring = {
   mass: 0.8,
 } as const
 
+const iconSpring = {
+  type: "spring",
+  stiffness: 600,
+  damping: 25,
+} as const
+
+const iconPop = {
+  initial: { scale: 0.5, opacity: 0 },
+  animate: { scale: 1, opacity: 1 },
+  exit: { scale: 0.5, opacity: 0 },
+  transition: iconSpring,
+} as const
+
 function fanPose(index: number, spread: boolean) {
   const dist = index - FAN_CENTER
   if (!spread) {
@@ -50,7 +64,9 @@ export function ImportScreen({ error, onFile }: ImportScreenProps) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [dragging, setDragging] = useState(false)
   const [fanHovered, setFanHovered] = useState(false)
+  const [dropHovered, setDropHovered] = useState(false)
   const spread = fanHovered || dragging
+  const ready = dropHovered || dragging
 
   return (
     <div className="app">
@@ -95,9 +111,14 @@ export function ImportScreen({ error, onFile }: ImportScreenProps) {
           </h1>
           <p className="import-note">{t("importNote")}</p>
 
-          <button
+          <motion.button
             type="button"
             className={`import-drop${dragging ? " is-dragging" : ""} w-full`}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.96 }}
+            animate={{ y: dragging ? -2 : 0 }}
+            onMouseEnter={() => setDropHovered(true)}
+            onMouseLeave={() => setDropHovered(false)}
             onClick={() => inputRef.current?.click()}
             onDragOver={(event) => {
               event.preventDefault()
@@ -112,11 +133,29 @@ export function ImportScreen({ error, onFile }: ImportScreenProps) {
             }}
           >
             <span className="import-drop-icon" aria-hidden="true">
-              ⤓
+              <AnimatePresence mode="popLayout" initial={false}>
+                {ready ? (
+                  <motion.span
+                    key="check"
+                    className="import-drop-icon-glyph"
+                    {...iconPop}
+                  >
+                    <Check />
+                  </motion.span>
+                ) : (
+                  <motion.span
+                    key="upload"
+                    className="import-drop-icon-glyph"
+                    {...iconPop}
+                  >
+                    <Upload />
+                  </motion.span>
+                )}
+              </AnimatePresence>
             </span>
             <strong>{t("dropCta")}</strong>
             <span>{t("dropHint")}</span>
-          </button>
+          </motion.button>
 
           <input
             ref={inputRef}
