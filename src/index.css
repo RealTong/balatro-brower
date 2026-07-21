@@ -1303,13 +1303,18 @@ h4 {
   align-items: flex-end;
   height: 4.6rem;
   margin-bottom: 1.2rem;
-  pointer-events: none;
+}
+
+.import-fan-stack {
+  position: relative;
+  width: 3rem;
+  height: 4rem;
+  cursor: pointer;
 }
 
 .import-fan-card {
-  width: 3rem;
-  height: 4rem;
-  margin-inline: -0.5rem;
+  position: absolute;
+  inset: 0;
   border-radius: 8px;
   border: 1px solid var(--line-strong);
   background: var(--surface-soft);
@@ -1317,8 +1322,6 @@ h4 {
   place-items: center;
   overflow: hidden;
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.45);
-  transform: rotate(calc(var(--i) * 8deg));
-  transform-origin: bottom center;
 }
 
 .import-fan-card img {

@@ -1,4 +1,5 @@
 import { useRef, useState } from "react"
+import { motion } from "framer-motion"
 
 import { wikiImageUrl } from "@/lib/gameData"
 import { useT } from "@/lib/uiText"
@@ -16,33 +17,76 @@ const DECOR = [
   "Blueprint",
 ]
 
+const FAN_ANGLE = 30
+const FAN_GAP = 60
+const FAN_LIFT = 10
+const FAN_CENTER = 2
+
+const fanSpring = {
+  type: "spring",
+  stiffness: 180,
+  damping: 20,
+  mass: 0.8,
+} as const
+
+function fanPose(index: number, spread: boolean) {
+  const dist = index - FAN_CENTER
+  if (!spread) {
+    return { rotate: dist * 5, x: dist * 10, y: 0, scale: 1 }
+  }
+  let lift = -FAN_LIFT
+  if (Math.abs(dist) === 2) lift = FAN_LIFT
+  else if (Math.abs(dist) === 1) lift = -0.2 * FAN_LIFT
+  return {
+    rotate: dist * (FAN_ANGLE / FAN_CENTER),
+    x: dist * (FAN_GAP / FAN_CENTER),
+    y: lift,
+    scale: dist === 0 ? 1.05 : 1,
+  }
+}
+
 export function ImportScreen({ error, onFile }: ImportScreenProps) {
   const t = useT()
   const inputRef = useRef<HTMLInputElement>(null)
   const [dragging, setDragging] = useState(false)
+  const [fanHovered, setFanHovered] = useState(false)
+  const spread = fanHovered || dragging
 
   return (
     <div className="app">
       <div className="app-bg" aria-hidden="true" />
       <div className="import-screen">
         <div className="panel import-card enter">
-          <div className="import-fan" aria-hidden="true">
-            {DECOR.map((name, index) => (
-              <span
-                className="import-fan-card"
-                key={name}
-                style={{ ["--i" as string]: String(index - 2) }}
-              >
-                <img
-                  src={wikiImageUrl(name)}
-                  alt=""
-                  loading="lazy"
-                  onError={(event) => {
-                    event.currentTarget.parentElement!.style.display = "none"
+          <div
+            className="import-fan"
+            aria-hidden="true"
+            onMouseEnter={() => setFanHovered(true)}
+            onMouseLeave={() => setFanHovered(false)}
+          >
+            <div className="import-fan-stack">
+              {DECOR.map((name, index) => (
+                <motion.span
+                  className="import-fan-card"
+                  key={name}
+                  animate={fanPose(index, spread)}
+                  transition={fanSpring}
+                  style={{
+                    zIndex: FAN_CENTER - Math.abs(index - FAN_CENTER),
+                    originX: 0.5,
+                    originY: 1,
                   }}
-                />
-              </span>
-            ))}
+                >
+                  <img
+                    src={wikiImageUrl(name)}
+                    alt=""
+                    loading="lazy"
+                    onError={(event) => {
+                      event.currentTarget.parentElement!.style.display = "none"
+                    }}
+                  />
+                </motion.span>
+              ))}
+            </div>
           </div>
 
           <span className="import-logo">Balatro Browser</span>
